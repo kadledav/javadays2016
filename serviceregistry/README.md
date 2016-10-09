@@ -1,0 +1,1 @@
+# Spring service registry based on Netflix Eureka

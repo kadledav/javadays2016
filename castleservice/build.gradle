@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVer")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group="$serviceGroup"
+version="$serviceVersion"
+
+buildDir="build_gradle"
+
+repositories {
+   jcenter()
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+	compile("org.springframework.cloud:spring-cloud-starter-config")
+	compile("org.springframework.cloud:spring-cloud-starter-eureka")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile("org.springframework.boot:spring-boot-starter-data-rest")
+    //To enable HAL(Hypertext Application Language) browser of the REST API
+	compile("org.springframework.data:spring-data-rest-hal-browser")
+	//Flyway DB migration
+	//compile("org.flywaydb:flyway-core")	
+
+	runtime("org.jolokia:jolokia-core")
+    //runtime 'org.apache.derby:derby:10.11.1.1'
+	runtime "com.h2database:h2"
+    runtime "org.postgresql:postgresql:$postgresqlVer"
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVer"
+	}
+}
+
+bootRun {
+	// support passing -Dsystem.property=value to bootRun task
+	systemProperties = System.properties
+}
+
+task generateWrapper(type: Wrapper) {
+	gradleVersion = '3.0'
+}
